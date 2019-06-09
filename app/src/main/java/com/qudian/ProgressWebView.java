@@ -8,8 +8,10 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.webkit.JavascriptInterface;
 import android.webkit.URLUtil;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -23,6 +25,7 @@ import static com.qudian.webChrome.CustomChromeClient.REQUEST_CODE_VIDEO_CAPTURE
 
 @SuppressLint("NewApi")
 public class ProgressWebView extends WebView {
+    private static final String TAG = "ProgressWebView";
     public boolean isStartLoadingNewWebview = false;
     public String tempUrl;
     public String mLastFinishedUrl;
@@ -75,13 +78,20 @@ public class ProgressWebView extends WebView {
                     onWebViewInterfaceListener.onPageFinished(view, url);
                 }
             }
-
+            public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
+                return super.shouldInterceptRequest(view,url);
+            }
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 if (url != null && !url.startsWith("http://") && !url.startsWith("https://")) {
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    getContext().startActivity(intent);
+                    try {
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        getContext().startActivity(intent);
+                    } catch (Exception e){
+                        Log.e(TAG,"WebView start activity fail",e);
+                    }
+
                     return true;
                 }
 

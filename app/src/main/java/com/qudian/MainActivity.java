@@ -3,25 +3,31 @@ package com.qudian;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.EditText;
 
 public class MainActivity extends AppCompatActivity {
-    ProgressWebView mWebView;
-
+    private EditText mEditText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        mWebView = findViewById(R.id.webview);
-        // 加载的链接
-        mWebView.loadUrl("http://lfqshop.lfqstandard.test3.qudian.com/v3/union/loan?_unionApp=changba");
-        // 初始化ProgressWebView
-        mWebView.initWebView(this);
+        setContentView(R.layout.main);
+        View btn = findViewById(R.id.go);
+        mEditText = MainActivity.this.findViewById(R.id.input);
+        mEditText.setText(WebViewActivity.DEFAULT_URL);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String url = mEditText.getText().toString();
+                WebViewActivity.launch(MainActivity.this, url);
+            }
+        });
 
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        mWebView.onActivityResult(requestCode, resultCode, data, this);
     }
 }

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">WebView</string>
+    <string name="go">GO</string>
 </resources>
