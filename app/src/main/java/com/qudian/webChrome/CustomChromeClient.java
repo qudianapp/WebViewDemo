@@ -46,13 +46,13 @@ public class CustomChromeClient extends WebChromeClient {
         mOpenFileChooserCallBack = new OpenFileChooserCallBack() {
             @Override
             public void openFileChooserCallBack(ValueCallback<Uri> uploadMsg, String acceptType) {
-                showOptions();
+                showOptions(acceptType);
                 mUploadMsg = uploadMsg;
             }
 
             @Override
             public boolean openFileChooserCallBackAndroid5(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
-                showOptions();
+                showOptions(fileChooserParams);
                 mUploadMsgForAndroid5 = filePathCallback;
                 return true;
             }
@@ -153,7 +153,24 @@ public class CustomChromeClient extends WebChromeClient {
             }
         }
     }
+    public void showOptions(String acceptType) {
+        if(acceptType !=null && acceptType.contains("video")){
+            showOptionsVideo();
+        } else {
+            showOptions();
+        }
+    }
 
+    public void showOptions(FileChooserParams fileChooserParams) {
+        String acceptType = "";
+        if(null != fileChooserParams){
+            String [] types = fileChooserParams.getAcceptTypes();
+            if(types != null && types.length > 0){
+                acceptType = types[0];
+            }
+        }
+        showOptions(acceptType);
+    }
 
     /**
      * 根据自己业务去做自定义
@@ -163,7 +180,7 @@ public class CustomChromeClient extends WebChromeClient {
         alertDialog.setOnCancelListener(new DialogOnCancelListener());
         alertDialog.setTitle("请选择操作");
         // gallery, camera.
-        String[] options = {"相册", "拍照", "录像(人脸识别测试)"};
+        String[] options = {"相册", "拍照"};
         alertDialog.setItems(options, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -226,47 +243,49 @@ public class CustomChromeClient extends WebChromeClient {
                                         Toast.LENGTH_SHORT).show();
                                 restoreUploadMsg();
                             }
-                        } else if (which == 2) {
-                            if (PermissionUtil.isOverMarshmallow()) {
-                                if (!PermissionUtil.isPermissionValid(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                                    Toast.makeText(mContext,
-                                            "请去\"设置\"中开启本应用的图片媒体访问权限",
-                                            Toast.LENGTH_SHORT).show();
-
-                                    restoreUploadMsg();
-                                    requestPermissionsAndroidM();
-                                    return;
-                                }
-
-                                if (!PermissionUtil.isPermissionValid(mContext, Manifest.permission.CAMERA)) {
-                                    Toast.makeText(mContext,
-                                            "请去\"设置\"中开启本应用的相机权限",
-                                            Toast.LENGTH_SHORT).show();
-
-                                    restoreUploadMsg();
-                                    requestPermissionsAndroidM();
-                                    return;
-                                }
-                            }
-
-                            try {
-                                mSourceIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-                                mSourceIntent.putExtra("android.intent.extras.CAMERA_FACING", 1);
-                                mContext.startActivityForResult(mSourceIntent, REQUEST_CODE_IMAGE_CAPTURE);
-                            } catch (Exception e) {
-                                Log.w("woshangdan", "onClick: e === " + e.getMessage());
-                                e.printStackTrace();
-                                Toast.makeText(mContext,
-                                        "请去\"设置\"中开启本应用的相机和图片媒体访问权限",
-                                        Toast.LENGTH_SHORT).show();
-                                restoreUploadMsg();
-                            }
                         }
                     }
                 }
         );
 
         alertDialog.show();
+    }
+
+    private void showOptionsVideo(){
+        if (PermissionUtil.isOverMarshmallow()) {
+            if (!PermissionUtil.isPermissionValid(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                Toast.makeText(mContext,
+                        "请去\"设置\"中开启本应用的图片媒体访问权限",
+                        Toast.LENGTH_SHORT).show();
+
+                restoreUploadMsg();
+                requestPermissionsAndroidM();
+                return;
+            }
+
+            if (!PermissionUtil.isPermissionValid(mContext, Manifest.permission.CAMERA)) {
+                Toast.makeText(mContext,
+                        "请去\"设置\"中开启本应用的相机权限",
+                        Toast.LENGTH_SHORT).show();
+
+                restoreUploadMsg();
+                requestPermissionsAndroidM();
+                return;
+            }
+        }
+
+        try {
+            mSourceIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+            mSourceIntent.putExtra("android.intent.extras.CAMERA_FACING", 1);
+            mContext.startActivityForResult(mSourceIntent, REQUEST_CODE_IMAGE_CAPTURE);
+        } catch (Exception e) {
+            Log.w("woshangdan", "onClick: e === " + e.getMessage());
+            e.printStackTrace();
+            Toast.makeText(mContext,
+                    "请去\"设置\"中开启本应用的相机和图片媒体访问权限",
+                    Toast.LENGTH_SHORT).show();
+            restoreUploadMsg();
+        }
     }
 
     private void requestPermissionsAndroidM() {

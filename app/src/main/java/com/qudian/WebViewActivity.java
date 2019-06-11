@@ -33,6 +33,16 @@ public class WebViewActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        String url = intent.getStringExtra("url");
+        if(mWebView != null){
+            mWebView.loadUrl(url == null ? DEFAULT_URL : url);
+        }
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         mWebView.onActivityResult(requestCode, resultCode, data, this);
