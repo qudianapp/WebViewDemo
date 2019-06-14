@@ -4,16 +4,28 @@
 <title>跳转APP实例</title>
 </head>
 <body>
- <a href="qdunionloan://aliface?verifyToken=fsafdsafdsfasfsafdssfa">
-    <button>跳转到webview22</button>
+ <a href="laifenqi://openapp?url=http%3a%2f%2flfqshop.lfqstandard.test3.qudian.com%2fv3%2funion%2floan%3f_unionApp%3dchangba">
+    <button>跳转到Web</button>
 </a>
- <a href="laifenqi://openapp?url=alipays%3a%2f%2fplatformapi%2fstartapp%3fappId%3d20000067%26url%3dhttps%253A%252F%252Fmapi.alipay.com%252Fgateway.do%253F_input_charset%253Dutf-8%2526access_info%253D%25257B%252522channel%252522%25253A%252522ALIPAYAPP%252522%25257D%2526external_sign_no%253D2019052314461497299322392%2526notify_url%253Dhttp%25253A%25252F%25252F59.110.54.222%25253A10001%25252Fchannel-notify%25252Fsignnotify%25252FSIGN_ALIPAY_CD_01%25252F2088231941163514%25252FLAIFENQI.do%2526partner%253D2088231941163514%2526product_code%253DMUTI_FIDUCIARY_PAYMENT_ENTRUST%2526return_url%253Dlaifenqi%25253A%25252F%25252Fopenapp%2526sales_product_code%253DMUTI_FIDUCIARY_PAYMENT%2526scene%253DINDUSTRY%25257CME_CONSUMER_FINANCE%2526service%253Dalipay.dut.customer.agreement.page.sign%2526sign%253Df46e869a5b0fc3bcd1611bc79789ec8b%2526sign_type%253DMD5">
-    <button>跳转到tel</button>
+ <a href="laifenqi://openapp?url=https://wx0000.cloudauth.alibaba.com/h5/h5verify.html?token=adf6a7a376f34701877d466fc6a93c58&tokenSource=getVerifyToken&successRedirect=http%3A%2F%2Flfqshop.lfqstandard.test3.qudian.com%2Fv3%2Funion%2Ftrust%2Fresult%2F%3Fquery%3Dresult%3Dwaitandsymbolticket%3D%7BBC292FE3-D740-3E63-515F-1BFE769F6F34%7Dandsymbolfrom%3Ddefault&failRedirect=http%3A%2F%2Flfqshop.lfqstandard.test3.qudian.com%2Fv3%2Funion%2Ftrust%2Fresult%2F%3Fquery%3Dresult%3Dfailandsymbolticket%3D%7BBC292FE3-D740-3E63-515F-1BFE769F6F34%7Dandsymbolfrom%3Ddefault#/biometricVideo">
+    <button>人脸识别</button>
 </a>
+
  <a href="alipays://platformapi/startapp?appId=20000067&url=https%3A%2F%2Fmapi.alipay.com%2Fgateway.do%3F_input_charset%3Dutf-8%26access_info%3D%257B%2522channel%2522%253A%2522ALIPAYAPP%2522%257D%26external_sign_no%3D2019052314461497299322392%26notify_url%3Dhttp%253A%252F%252F59.110.54.222%253A10001%252Fchannel-notify%252Fsignnotify%252FSIGN_ALIPAY_CD_01%252F2088231941163514%252FLAIFENQI.do%26partner%3D2088231941163514%26product_code%3DMUTI_FIDUCIARY_PAYMENT_ENTRUST%26return_url%3Dlaifenqi%253A%252F%252Fopenapp%26sales_product_code%3DMUTI_FIDUCIARY_PAYMENT%26scene%3DINDUSTRY%257CME_CONSUMER_FINANCE%26service%3Dalipay.dut.customer.agreement.page.sign%26sign%3Df46e869a5b0fc3bcd1611bc79789ec8b%26sign_type%3DMD5">
-    <button>订单详情</button>
+    <button>支付宝</button>
 </a>
-<div id="time"></div>
+
+ <label for="file">file</label>
+ <input
+         id="file"
+         type='file'
+         accept='image/jpeg,image/jpg,image/png'
+         capture='camera'
+ />
+<div id="time">
+
+</div>
+
 <script>
 var date = new Date().toString()
 var time = document.getElementById('time')    

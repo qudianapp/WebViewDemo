@@ -20,6 +20,9 @@ public class PermissionUtil {
     private static final String PERMISSIONS_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String PERMISSIONS_AUDIO = Manifest.permission.RECORD_AUDIO;
 
+    // permission Code
+    public static final int PERMISSIONS_CODE_VIDEO = 101;
+    public static final int PERMISSIONS_CODE_IMAGE = 102;
 
     public static final boolean isOverMarshmallow() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M;

@@ -29,8 +29,6 @@ public class CustomChromeClient extends WebChromeClient {
     public static final int REQUEST_CODE_PICK_IMAGE = 10003;
     public static final int REQUEST_CODE_IMAGE_CAPTURE = 10004;
     public static final int REQUEST_CODE_VIDEO_CAPTURE = 10005;
-    // permission Code
-    private static final int P_CODE_PERMISSIONS = 101;
 
     private Intent mSourceIntent;
     private ValueCallback<Uri> mUploadMsg;
@@ -154,6 +152,7 @@ public class CustomChromeClient extends WebChromeClient {
         }
     }
     public void showOptions(String acceptType) {
+        Log.d(TAG,"acceptType="+acceptType,new Throwable());
         if(acceptType !=null && acceptType.contains("video")){
             showOptionsVideo();
         } else {
@@ -191,8 +190,8 @@ public class CustomChromeClient extends WebChromeClient {
                                             "请去\"设置\"中开启本应用的图片媒体访问权限",
                                             Toast.LENGTH_SHORT).show();
 
-                                    restoreUploadMsg();
-                                    requestPermissionsAndroidM();
+                                    // restoreUploadMsg();
+                                    requestPermissionsAndroidM(PermissionUtil.PERMISSIONS_CODE_IMAGE);
                                     return;
                                 }
 
@@ -216,8 +215,8 @@ public class CustomChromeClient extends WebChromeClient {
                                             "请去\"设置\"中开启本应用的图片媒体访问权限",
                                             Toast.LENGTH_SHORT).show();
 
-                                    restoreUploadMsg();
-                                    requestPermissionsAndroidM();
+                                    // restoreUploadMsg();
+                                    requestPermissionsAndroidM(PermissionUtil.PERMISSIONS_CODE_IMAGE);
                                     return;
                                 }
 
@@ -226,8 +225,8 @@ public class CustomChromeClient extends WebChromeClient {
                                             "请去\"设置\"中开启本应用的相机权限",
                                             Toast.LENGTH_SHORT).show();
 
-                                    restoreUploadMsg();
-                                    requestPermissionsAndroidM();
+                                    // restoreUploadMsg();
+                                    requestPermissionsAndroidM(PermissionUtil.PERMISSIONS_CODE_IMAGE);
                                     return;
                                 }
                             }
@@ -251,15 +250,15 @@ public class CustomChromeClient extends WebChromeClient {
         alertDialog.show();
     }
 
-    private void showOptionsVideo(){
+    public void showOptionsVideo(){
         if (PermissionUtil.isOverMarshmallow()) {
             if (!PermissionUtil.isPermissionValid(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 Toast.makeText(mContext,
                         "请去\"设置\"中开启本应用的图片媒体访问权限",
                         Toast.LENGTH_SHORT).show();
 
-                restoreUploadMsg();
-                requestPermissionsAndroidM();
+                // restoreUploadMsg();
+                requestPermissionsAndroidM(PermissionUtil.PERMISSIONS_CODE_VIDEO);
                 return;
             }
 
@@ -268,8 +267,8 @@ public class CustomChromeClient extends WebChromeClient {
                         "请去\"设置\"中开启本应用的相机权限",
                         Toast.LENGTH_SHORT).show();
 
-                restoreUploadMsg();
-                requestPermissionsAndroidM();
+                // restoreUploadMsg();
+                requestPermissionsAndroidM(PermissionUtil.PERMISSIONS_CODE_VIDEO);
                 return;
             }
         }
@@ -288,19 +287,19 @@ public class CustomChromeClient extends WebChromeClient {
         }
     }
 
-    private void requestPermissionsAndroidM() {
+    private void requestPermissionsAndroidM(int permissionCode) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             List<String> needPermissionList = new ArrayList<>();
             needPermissionList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
             needPermissionList.add(Manifest.permission.READ_EXTERNAL_STORAGE);
             needPermissionList.add(Manifest.permission.CAMERA);
-            PermissionUtil.requestPermissions(mContext, P_CODE_PERMISSIONS, needPermissionList);
+            PermissionUtil.requestPermissions(mContext, permissionCode, needPermissionList);
         } else {
             return;
         }
     }
 
-    private void restoreUploadMsg() {
+    public void restoreUploadMsg() {
         if (mUploadMsg != null) {
             mUploadMsg.onReceiveValue(null);
             mUploadMsg = null;

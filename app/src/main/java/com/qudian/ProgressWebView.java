@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
@@ -17,6 +18,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.qudian.webChrome.CustomChromeClient;
+import com.qudian.webChrome.PermissionUtil;
 
 import static com.qudian.webChrome.CustomChromeClient.REQUEST_CODE_IMAGE_CAPTURE;
 import static com.qudian.webChrome.CustomChromeClient.REQUEST_CODE_PICK_IMAGE;
@@ -147,6 +149,43 @@ public class ProgressWebView extends WebView {
                 || requestCode == REQUEST_CODE_VIDEO_CAPTURE) {
             customChromeClient.onActivityResult(requestCode, resultCode, data);
         }
+    }
+
+    /**
+     * 授权回调接口
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == PermissionUtil.PERMISSIONS_CODE_VIDEO) {
+            if(isGranted(grantResults)){
+                customChromeClient.showOptionsVideo();
+            }else {
+                // do nothing
+                customChromeClient.restoreUploadMsg();
+            }
+        } else if (requestCode == PermissionUtil.PERMISSIONS_CODE_IMAGE){
+            if(isGranted(grantResults)){
+                customChromeClient.showOptions();
+            }else {
+                // do nothing
+                customChromeClient.restoreUploadMsg();
+            }
+        }
+    }
+
+    private boolean isGranted(int[] grantResults){
+        boolean flag = true;
+        for (int result : grantResults) {
+            if (result == PackageManager.PERMISSION_GRANTED) {
+                continue;
+            } else {
+                flag = false;
+            }
+        }
+
+        return flag;
     }
 
 
